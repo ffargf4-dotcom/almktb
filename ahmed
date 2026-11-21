@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة وسجل الديون السحابي | Smart Debt Ledger</title>
+  
+  <!-- مكتبة Tailwind CSS الرسمية للتصميم العصري المتجاوب -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- خط عربي حديث Cairo من Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+    }
+    .badge-overdue {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .badge-warning {
+      background-color: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .badge-success {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .badge-info {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.3);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+  <!-- شريط التنقل العلوي -->
+  <header class="bg-slate-800/90 backdrop-blur-md border-b border-slate-700/60 sticky top-0 z-40 px-4 lg:px-8 py-3.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- الشعار والعنوان -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/20 text-white font-bold text-xl">
+          ﷼
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg lg:text-xl font-extrabold tracking-tight text-white">سجل الديون والالتزامات الذكي</h1>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Google Cloud</span>
+          </div>
+          <p class="text-xs text-slate-400">مربوط مع Google Sheets للمزامنة و Google Drive للأرشفة</p>
+        </div>
+      </div>
+
+      <!-- أزرار الإجراء السريع -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="openModal('syncModal')" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-700/60 hover:bg-slate-700 border border-slate-600/60 text-xs font-medium text-slate-300 transition-colors">
+          <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="syncStatusText">إعدادات الربط بالشيت</span>
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </button>
+
+        <button onclick="openModal('addDebtModal')" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-teal-600/25 transition-all transform active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>تسجيل دين جديد</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- المحتوى الرئيسي -->
+  <main class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-6 flex-1 flex flex-col gap-6">
+
+    <!-- كروت الإحصائيات (KPIs) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <div class="relative overflow-hidden bg-slate-800/80 rounded-2xl p-5 border border-slate-700/60 shadow-lg shadow-slate-900/40">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-emerald-400">ديون مستحقة لنا (مدينون)</span>
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="text-2xl font-black text-white" id="kpiReceivable">0.00 ر.س</div>
+          <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+            <span class="text-emerald-400 font-bold" id="kpiReceivableCount">0</span> عميل مدين
+          </p>
+        </div>
+      </div>
+
+      <div class="relative overflow-hidden bg-slate-800/80 rounded-2xl p-5 border border-slate-700/60 shadow-lg shadow-slate-900/40">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-rose-400">ديون مستحقة علينا (دائنون)</span>
+          <div class="w-8 h-8 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="text-2xl font-black text-white" id="kpiPayable">0.00 ر.س</div>
+          <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+            <span class="text-rose-400 font-bold" id="kpiPayableCount">0</span> جهة دائنة
+          </p>
+        </div>
+      </div>
+
+      <div class="relative overflow-hidden bg-slate-800/80 rounded-2xl p-5 border border-slate-700/60 shadow-lg shadow-slate-900/40">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-amber-400">متأخرات تجاوزت التاريخ</span>
+          <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="text-2xl font-black text-amber-400" id="kpiOverdue">0.00 ر.س</div>
+          <p class="text-[11px] text-slate-400 mt-1">تتطلب متابعة وتذكير</p>
+        </div>
+      </div>
+
+      <div class="relative overflow-hidden bg-slate-800/80 rounded-2xl p-5 border border-slate-700/60 shadow-lg shadow-slate-900/40">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-teal-400">إجمالي المتحصلات</span>
+          <div class="w-8 h-8 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="text-2xl font-black text-teal-300" id="kpiCollected">0.00 ر.س</div>
+          <p class="text-[11px] text-slate-400 mt-1">مدفوعات مؤكدة</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- الفلترة والبحث وتصدير إكسيل -->
+    <section class="bg-slate-800/70 border border-slate-700/70 rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      
+      <div class="flex items-center gap-2 p-1 bg-slate-900/60 rounded-xl border border-slate-700/60">
+        <button onclick="setFilter('all')" id="tabAll" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-emerald-600 text-white shadow-sm">
+          الكل (<span id="countAll">0</span>)
+        </button>
+        <button onclick="setFilter('receivable')" id="tabReceivable" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white">
+          لنا / عملاء (<span id="countReceivable">0</span>)
+        </button>
+        <button onclick="setFilter('payable')" id="tabPayable" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white">
+          علينا / موردين (<span id="countPayable">0</span>)
+        </button>
+        <button onclick="setFilter('overdue')" id="tabOverdue" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-rose-400">
+          المتأخرات ⚠️
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2.5 flex-1 max-w-md">
+        <div class="relative w-full">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="بحث باسم العميل، الهاتف، أو الملاحظات..." 
+            oninput="renderTable()"
+            class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-9 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 transition-colors"
+          >
+          <svg class="w-4 h-4 text-slate-400 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+
+        <button onclick="exportCSV()" title="تصدير ملف Excel / CSV" class="p-2 rounded-xl bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/60 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- جدول العمليات -->
+    <section class="bg-slate-800/80 border border-slate-700/70 rounded-2xl overflow-hidden shadow-xl">
+      <div class="overflow-x-auto">
+        <table class="w-full text-right text-xs">
+          <thead>
+            <tr class="bg-slate-900/70 text-slate-400 border-b border-slate-700 font-bold uppercase tracking-wider">
+              <th class="py-3.5 px-4">الطرف / العميل</th>
+              <th class="py-3.5 px-4">النوع</th>
+              <th class="py-3.5 px-4">المبلغ الكلي</th>
+              <th class="py-3.5 px-4">المدفوع</th>
+              <th class="py-3.5 px-4">المتبقي</th>
+              <th class="py-3.5 px-4">تاريخ الاستحقاق</th>
+              <th class="py-3.5 px-4">الحالة</th>
+              <th class="py-3.5 px-4">مستند Drive</th>
+              <th class="py-3.5 px-4 text-center">الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="debtsTableBody" class="divide-y divide-slate-700/60"></tbody>
+        </table>
+      </div>
+
+      <div id="emptyState" class="hidden py-12 text-center">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-slate-700/40 flex items-center justify-center text-slate-400">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <h3 class="text-sm font-bold text-slate-300">لا توجد سجلات مطابقة</h3>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- نوافذ المودال (إضافة دين، تسجيل دفعة، إعدادات، تذكير واتساب) -->
+  <div id="addDebtModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between bg-slate-900/50">
+        <h3 class="font-bold text-base text-white flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          تسجيل دين أو التزام جديد
+        </h3>
+        <button onclick="closeModal('addDebtModal')" class="text-slate-400 hover:text-white text-lg">&times;</button>
+      </div>
+
+      <form id="newDebtForm" onsubmit="handleSaveDebt(event)" class="p-6 space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <label class="cursor-pointer border border-slate-700 rounded-xl p-3 flex items-center gap-2.5 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-500/10 transition-all">
+            <input type="radio" name="debtType" value="receivable" checked class="accent-emerald-500">
+            <div>
+              <span class="font-bold text-slate-200 block">دين لنا (مستحق لنا)</span>
+              <span class="text-[10px] text-slate-400">عميل مدين لك</span>
+            </div>
+          </label>
+          <label class="cursor-pointer border border-slate-700 rounded-xl p-3 flex items-center gap-2.5 has-[:checked]:border-rose-500 has-[:checked]:bg-rose-500/10 transition-all">
+            <input type="radio" name="debtType" value="payable" class="accent-rose-500">
+            <div>
+              <span class="font-bold text-slate-200 block">دين علينا (مستحق للغير)</span>
+              <span class="text-[10px] text-slate-400">مورد أو التزام عليك</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">اسم الطرف / العميل *</label>
+            <input type="text" id="debtPartyName" required placeholder="مثال: شركة الأفق أو محمد أحمد" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-teal-500">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">رقم الهاتف (لرسائل الواتساب)</label>
+            <input type="tel" id="debtPhone" placeholder="966501234567" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-teal-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">المبلغ الإجمالي (ر.س) *</label>
+            <input type="number" step="0.01" id="debtAmount" required placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none focus:border-teal-500">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">تاريخ الاستحقاق *</label>
+            <input type="date" id="debtDueDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-teal-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">رابط الفاتورة في Google Drive</label>
+          <input type="url" id="debtDriveUrl" placeholder="https://drive.google.com/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-teal-500 text-xs">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">بيان وملاحظات المعاملة</label>
+          <textarea id="debtNotes" rows="2" placeholder="أرقام الفواتير، الأصناف، شروط الدفع..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-teal-500"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3 border-t border-slate-700">
+          <button type="button" onclick="closeModal('addDebtModal')" class="px-4 py-2 rounded-xl bg-slate-700 text-slate-300">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-600/30">حفظ وترحيل</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- مودال تسجيل دفعة سداد -->
+  <div id="paymentModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between bg-slate-900/50">
+        <h3 class="font-bold text-base text-white flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+          تسجيل دفعة سداد (سند قبض)
+        </h3>
+        <button onclick="closeModal('paymentModal')" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+
+      <form id="paymentForm" onsubmit="handleSavePayment(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="payDebtId">
+
+        <div class="bg-slate-900/70 p-3 rounded-xl border border-slate-700/60">
+          <div class="text-slate-400">الطرف: <span id="payPartyName" class="text-white font-bold"></span></div>
+          <div class="text-slate-400 mt-1">المتبقي حالياً: <span id="payRemainingAmount" class="text-emerald-400 font-extrabold text-sm"></span></div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">المبلغ المدفوع *</label>
+          <input type="number" step="0.01" id="payAmount" required placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none focus:border-teal-500">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">تاريخ الدفعة</label>
+          <input type="date" id="payDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-teal-500">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">طريقة الدفع</label>
+          <select id="payMethod" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-teal-500">
+            <option value="تحويل بنكي">تحويل بنكي</option>
+            <option value="نقداً (كاش)">نقداً (كاش)</option>
+            <option value="شبكة / مدى">شبكة / مدى</option>
+            <option value="شيك">شيك مصرفي</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">رابط إشعار التحويل في Google Drive</label>
+          <input type="url" id="payDriveUrl" placeholder="https://drive.google.com/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-teal-500">
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3 border-t border-slate-700">
+          <button type="button" onclick="closeModal('paymentModal')" class="px-4 py-2 rounded-xl bg-slate-700 text-slate-300">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold">تأكيد الدفعة</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- مودال إعدادات الربط بالشيت -->
+  <div id="syncModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between bg-slate-900/50">
+        <h3 class="font-bold text-base text-white">إعدادات الربط مع Google Sheets & Drive</h3>
+        <button onclick="closeModal('syncModal')" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+      <div class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">رابط Google Apps Script Web App (/exec)</label>
+          <input type="url" id="gasEndpointUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-[11px] focus:outline-none focus:border-teal-500">
+          <p class="text-[10px] text-slate-500 mt-1">الرابط المستخرج من جوجل شيت (Deploy ➔ Web app).</p>
+        </div>
+        <div class="pt-3 flex items-center justify-between border-t border-slate-700">
+          <button onclick="resetToSampleData()" class="text-slate-400 hover:text-rose-400">استعادة البيانات الافتراضية</button>
+          <button onclick="saveSyncSettings()" class="px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold">حفظ الرابط</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- مودال تذكير واتساب -->
+  <div id="statementModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between bg-slate-900/50">
+        <h3 class="font-bold text-base text-white">تذكير السداد عبر WhatsApp</h3>
+        <button onclick="closeModal('statementModal')" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+      <div class="p-6 space-y-4 text-xs">
+        <div id="statementCustomerInfo" class="p-3 bg-slate-900 rounded-xl border border-slate-700"></div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">نص الرسالة التلقائية:</label>
+          <textarea id="whatsappMsgPreview" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-teal-500 text-xs"></textarea>
+        </div>
+        <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-700">
+          <button onclick="closeModal('statementModal')" class="px-4 py-2 rounded-xl bg-slate-700 text-slate-300">إلغاء</button>
+          <button onclick="sendWhatsAppNow()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center gap-1.5">
+            <span>إرسال عبر WhatsApp</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 left-6 z-50 bg-slate-800 border border-emerald-500/40 text-emerald-400 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 transform translate-y-20 opacity-0 transition-all duration-300">
+    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span id="toastMsg" class="text-xs font-semibold">تم الحفظ بنجاح</span>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'smart_debt_ledger_data_gh';
+    const SETTINGS_KEY = 'smart_debt_ledger_settings_gh';
+
+    const defaultData = [
+      {
+        id: "D-101",
+        party: "شركة الأفق للتقنية",
+        phone: "966501234567",
+        type: "receivable",
+        amount: 8500.00,
+        paid: 3000.00,
+        dueDate: "2026-11-15",
+        driveUrl: "https://drive.google.com",
+        notes: "فاتورة توريد حواسب وشبكات",
+        createdAt: "2026-10-01"
+      },
+      {
+        id: "D-102",
+        party: "مؤسسة التوريدات المتقدمة",
+        phone: "966559876543",
+        type: "payable",
+        amount: 14200.00,
+        paid: 5000.00,
+        dueDate: "2026-12-05",
+        driveUrl: "https://drive.google.com",
+        notes: "دفعة مواد خام لشهر نوفمبر",
+        createdAt: "2026-11-05"
+      },
+      {
+        id: "D-103",
+        party: "سالم عبد الله المري",
+        phone: "966541122334",
+        type: "receivable",
+        amount: 2500.00,
+        paid: 2500.00,
+        dueDate: "2026-11-10",
+        driveUrl: "",
+        notes: "تم سداد كامل الحساب",
+        createdAt: "2026-10-20"
+      }
+    ];
+
+    let debts = [];
+    let currentFilter = 'all';
+    let activeStatementDebt = null;
+
+    function initApp() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try { debts = JSON.parse(saved); } catch(e) { debts = defaultData; }
+      } else {
+        debts = defaultData;
+        saveData();
+      }
+
+      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      if (settings.gasUrl) {
+        document.getElementById('gasEndpointUrl').value = settings.gasUrl;
+        document.getElementById('syncStatusText').textContent = "مربوط مع Google Sheets";
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+      const dInput = document.getElementById('debtDueDate');
+      if (dInput) dInput.value = today;
+      const pInput = document.getElementById('payDate');
+      if (pInput) pInput.value = today;
+
+      calculateKPIs();
+      renderTable();
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(debts));
+    }
+
+    function calculateKPIs() {
+      const today = new Date().toISOString().split('T')[0];
+      let recTotal = 0, recCount = 0, payTotal = 0, payCount = 0, overdueTotal = 0, collectedTotal = 0;
+
+      debts.forEach(d => {
+        const remaining = Math.max(0, d.amount - d.paid);
+        collectedTotal += Number(d.paid || 0);
+
+        if (d.type === 'receivable') {
+          recTotal += remaining;
+          if (remaining > 0) recCount++;
+        } else {
+          payTotal += remaining;
+          if (remaining > 0) payCount++;
+        }
+
+        if (remaining > 0 && d.dueDate < today) {
+          overdueTotal += remaining;
+        }
+      });
+
+      document.getElementById('kpiReceivable').textContent = formatCurrency(recTotal);
+      document.getElementById('kpiReceivableCount').textContent = recCount;
+      document.getElementById('kpiPayable').textContent = formatCurrency(payTotal);
+      document.getElementById('kpiPayableCount').textContent = payCount;
+      document.getElementById('kpiOverdue').textContent = formatCurrency(overdueTotal);
+      document.getElementById('kpiCollected').textContent = formatCurrency(collectedTotal);
+
+      document.getElementById('countAll').textContent = debts.length;
+      document.getElementById('countReceivable').textContent = debts.filter(d => d.type === 'receivable').length;
+      document.getElementById('countPayable').textContent = debts.filter(d => d.type === 'payable').length;
+    }
+
+    function formatCurrency(val) {
+      return Number(val || 0).toLocaleString('ar-SA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ر.س';
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      ['all', 'receivable', 'payable', 'overdue'].forEach(f => {
+        const btn = document.getElementById('tab' + f.charAt(0).toUpperCase() + f.slice(1));
+        if (btn) {
+          btn.className = (f === filter) 
+            ? "px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-emerald-600 text-white shadow-sm"
+            : "px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white";
+        }
+      });
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('debtsTableBody');
+      const empty = document.getElementById('emptyState');
+      const query = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const today = new Date().toISOString().split('T')[0];
+
+      let filtered = debts.filter(d => {
+        const matchSearch = d.party.toLowerCase().includes(query) || 
+                            (d.phone && d.phone.includes(query)) || 
+                            (d.notes && d.notes.toLowerCase().includes(query));
+        if (!matchSearch) return false;
+        const remaining = d.amount - d.paid;
+        if (currentFilter === 'receivable') return d.type === 'receivable';
+        if (currentFilter === 'payable') return d.type === 'payable';
+        if (currentFilter === 'overdue') return remaining > 0 && d.dueDate < today;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      tbody.innerHTML = filtered.map(d => {
+        const remaining = Math.max(0, d.amount - d.paid);
+        const isPaid = remaining <= 0;
+        const isOverdue = !isPaid && d.dueDate < today;
+        const isDueSoon = !isPaid && !isOverdue && isDateWithinDays(d.dueDate, 7);
+
+        let statusBadge = isPaid 
+          ? '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold badge-success">تم السداد ✓</span>'
+          : (isOverdue 
+              ? '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold badge-overdue animate-pulse">متأخر ⚠️</span>'
+              : (isDueSoon ? '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold badge-warning">يستحق قريباً ⏰</span>' : '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold badge-info">ساري</span>'));
+
+        const typeBadge = d.type === 'receivable' 
+          ? '<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-500/20 text-emerald-400">لنا (مدين)</span>'
+          : '<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-500/20 text-rose-400">علينا (دائن)</span>';
+
+        const driveBtn = d.driveUrl 
+          ? `<a href="${d.driveUrl}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-teal-500/10 text-teal-400 hover:bg-teal-500/20 border border-teal-500/30">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              <span>Drive</span>
+             </a>`
+          : `<span class="text-slate-600 text-[10px]">-</span>`;
+
+        return `
+          <tr class="hover:bg-slate-700/30 transition-colors">
+            <td class="py-3 px-4">
+              <div class="font-bold text-white text-xs">${escapeHtml(d.party)}</div>
+              <div class="text-[10px] text-slate-400">${d.phone ? escapeHtml(d.phone) : 'بدون هاتف'}</div>
+            </td>
+            <td class="py-3 px-4">${typeBadge}</td>
+            <td class="py-3 px-4 font-semibold text-slate-200">${formatCurrency(d.amount)}</td>
+            <td class="py-3 px-4 text-emerald-400">${formatCurrency(d.paid)}</td>
+            <td class="py-3 px-4 font-bold ${remaining > 0 ? 'text-amber-400' : 'text-slate-400'}">${formatCurrency(remaining)}</td>
+            <td class="py-3 px-4 text-slate-300 font-mono text-[11px]">${d.dueDate}</td>
+            <td class="py-3 px-4">${statusBadge}</td>
+            <td class="py-3 px-4">${driveBtn}</td>
+            <td class="py-3 px-4">
+              <div class="flex items-center justify-center gap-1.5">
+                ${!isPaid ? `
+                  <button onclick="openPaymentModal('${d.id}')" title="تسجيل دفعة" class="px-2 py-1 rounded-lg bg-emerald-600/80 hover:bg-emerald-600 text-white text-[11px] font-bold">
+                    + دفعة
+                  </button>
+                ` : ''}
+                <button onclick="openStatementModal('${d.id}')" title="واتساب" class="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2z"/></svg>
+                </button>
+                <button onclick="deleteDebt('${d.id}')" title="حذف" class="p-1.5 rounded-lg bg-slate-700 hover:bg-rose-500/20 hover:text-rose-400 text-slate-400">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function isDateWithinDays(dateStr, days) {
+      const target = new Date(dateStr);
+      const now = new Date();
+      const diffDays = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+      return diffDays >= 0 && diffDays <= days;
+    }
+
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+    }
+
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+    }
+
+    function handleSaveDebt(e) {
+      e.preventDefault();
+      const newDebt = {
+        id: "D-" + (Math.floor(100 + Math.random() * 900)),
+        party: document.getElementById('debtPartyName').value.trim(),
+        phone: document.getElementById('debtPhone').value.trim(),
+        type: document.querySelector('input[name="debtType"]:checked').value,
+        amount: parseFloat(document.getElementById('debtAmount').value),
+        paid: 0,
+        dueDate: document.getElementById('debtDueDate').value,
+        driveUrl: document.getElementById('debtDriveUrl').value.trim(),
+        notes: document.getElementById('debtNotes').value.trim(),
+        createdAt: new Date().toISOString().split('T')[0]
+      };
+
+      debts.unshift(newDebt);
+      saveData();
+      calculateKPIs();
+      renderTable();
+      closeModal('addDebtModal');
+      document.getElementById('newDebtForm').reset();
+      showToast("تم الحفظ والمزامنة بنجاح");
+      syncRecordWithBackend(newDebt, 'ADD_DEBT');
+    }
+
+    function openPaymentModal(debtId) {
+      const debt = debts.find(d => d.id === debtId);
+      if (!debt) return;
+      const remaining = Math.max(0, debt.amount - debt.paid);
+      document.getElementById('payDebtId').value = debt.id;
+      document.getElementById('payPartyName').textContent = debt.party;
+      document.getElementById('payRemainingAmount').textContent = formatCurrency(remaining);
+      document.getElementById('payAmount').value = remaining;
+      document.getElementById('payAmount').max = remaining;
+      openModal('paymentModal');
+    }
+
+    function handleSavePayment(e) {
+      e.preventDefault();
+      const id = document.getElementById('payDebtId').value;
+      const payAmount = parseFloat(document.getElementById('payAmount').value);
+      const payMethod = document.getElementById('payMethod').value;
+      const payDriveUrl = document.getElementById('payDriveUrl').value.trim();
+
+      const debt = debts.find(d => d.id === id);
+      if (debt) {
+        debt.paid = Math.min(debt.amount, debt.paid + payAmount);
+        saveData();
+        calculateKPIs();
+        renderTable();
+        closeModal('paymentModal');
+        showToast("تم تسجيل الدفعة وتحديث الرصيد");
+        syncRecordWithBackend({
+          debtId: debt.id,
+          party: debt.party,
+          amountPaid: payAmount,
+          method: payMethod,
+          driveUrl: payDriveUrl,
+          date: document.getElementById('payDate').value
+        }, 'ADD_PAYMENT');
+      }
+    }
+
+    function deleteDebt(id) {
+      if (confirm("هل تريد بالتأكيد حذف هذا السجل؟")) {
+        debts = debts.filter(d => d.id !== id);
+        saveData();
+        calculateKPIs();
+        renderTable();
+        showToast("تم الحذف بنجاح");
+      }
+    }
+
+    function openStatementModal(debtId) {
+      const debt = debts.find(d => d.id === debtId);
+      if (!debt) return;
+      activeStatementDebt = debt;
+      const remaining = Math.max(0, debt.amount - debt.paid);
+
+      document.getElementById('statementCustomerInfo').innerHTML = `
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-white">${escapeHtml(debt.party)}</span>
+          <span class="text-emerald-400 font-bold">${formatCurrency(remaining)}</span>
+        </div>
+        <div class="text-[11px] text-slate-400 mt-1">تاريخ الاستحقاق: ${debt.dueDate}</div>
+      `;
+
+      let msg = (debt.type === 'receivable')
+        ? `السلام عليكم ورحمة الله، الأفاضل في ${debt.party}،\nنود تذكيركم بوجود مستحقات مالية سارية بقيمة (${remaining.toLocaleString()} ر.س) تستحق بتاريخ (${debt.dueDate}).\nشاكرين ومقدرين حسن تعاونكم.`
+        : `السلام عليكم، بخصوص الالتزام المالي المستحق لكم بمبلغ (${remaining.toLocaleString()} ر.س)، نود تأكيد موعد السداد (${debt.dueDate}). مع التقدير.`;
+
+      document.getElementById('whatsappMsgPreview').value = msg;
+      openModal('statementModal');
+    }
+
+    function sendWhatsAppNow() {
+      if (!activeStatementDebt) return;
+      const phone = (activeStatementDebt.phone || '').replace(/[^0-9]/g, '');
+      const text = encodeURIComponent(document.getElementById('whatsappMsgPreview').value);
+      if (!phone) {
+        alert("يرجى التأكد من كتابة رقم هاتف صحيح للعميل.");
+        return;
+      }
+      window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+      closeModal('statementModal');
+    }
+
+    function syncRecordWithBackend(payload, action) {
+      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      if (!settings.gasUrl) return;
+      fetch(settings.gasUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, data: payload })
+      }).catch(err => console.error("Sync error:", err));
+    }
+
+    function saveSyncSettings() {
+      const gasUrl = document.getElementById('gasEndpointUrl').value.trim();
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ gasUrl }));
+      closeModal('syncModal');
+      document.getElementById('syncStatusText').textContent = gasUrl ? "مربوط مع Google Sheets" : "وضع محلي";
+      showToast("تم حفظ الإعدادات بنجاح");
+    }
+
+    function resetToSampleData() {
+      if (confirm("هل تريد استعادة البيانات الافتراضية؟")) {
+        debts = defaultData;
+        saveData();
+        calculateKPIs();
+        renderTable();
+        closeModal('syncModal');
+        showToast("تمت الاستعادة");
+      }
+    }
+
+    function exportCSV() {
+      let csv = "\uFEFFالطرف,النوع,المبلغ,المدفوع,المتبقي,تاريخ الاستحقاق,الهاتف,ملاحظات\n";
+      debts.forEach(d => {
+        csv += `"${d.party}","${d.type === 'receivable' ? 'لنا' : 'علينا'}","${d.amount}","${d.paid}","${d.amount - d.paid}","${d.dueDate}","${d.phone || ''}","${d.notes || ''}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `سجل_الديون_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
