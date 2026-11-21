@@ -1,0 +1,2780 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#f2f4f7;
+  color:#17243a;
+}
+
+button,
+input{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+/* HEADER */
+header{
+  background:#17243a;
+  color:white;
+  padding:24px 12px;
+  text-align:center;
+  border-bottom:4px solid #bd9854;
+}
+
+header h1{
+  font-size:25px;
+  margin:0 0 10px;
+}
+
+header h2{
+  color:#dfbd78;
+  font-size:22px;
+  margin:0 0 8px;
+}
+
+header p{
+  font-size:13px;
+  margin:0;
+}
+
+/* CONTAINER */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:16px;
+}
+
+/* HOME */
+.home{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+  margin:35px auto;
+  max-width:700px;
+}
+
+.main-card{
+  min-height:170px;
+  border:0;
+  border-radius:16px;
+  color:white;
+  font-size:20px;
+  font-weight:bold;
+  background:#b18b48;
+  box-shadow:0 5px 16px #0002;
+}
+
+.main-card:nth-child(2){
+  background:#304c68;
+}
+
+.main-card span{
+  display:block;
+  font-size:37px;
+  margin-bottom:12px;
+}
+
+/* PANEL */
+.panel{
+  background:white;
+  padding:18px;
+  border-radius:15px;
+  box-shadow:0 3px 15px #0000000c;
+  margin-bottom:18px;
+}
+
+h3{
+  margin:0 0 18px;
+  font-size:19px;
+}
+
+/* FIELDS */
+.field{
+  margin-bottom:14px;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:7px;
+  font-size:14px;
+}
+
+input{
+  width:100%;
+  padding:13px;
+  border:1px solid #d8dde5;
+  border-radius:9px;
+  font-size:15px;
+  outline:none;
+  background:#fff;
+}
+
+input:focus{
+  border-color:#b18b48;
+}
+
+input:disabled{
+  background:#f0f2f5;
+  color:#555;
+}
+
+/* FILE */
+.filebox{
+  border:2px dashed #b18b48;
+  padding:18px;
+  text-align:center;
+  border-radius:10px;
+  color:#8b713e;
+}
+
+.filebox input{
+  margin-top:10px;
+  border:0;
+  padding:5px;
+}
+
+/* RECEIVED */
+.received-box{
+  border:1px solid #d8dde5;
+  border-radius:10px;
+  padding:12px 14px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.received-box input{
+  width:22px;
+  height:22px;
+  margin:0;
+  padding:0;
+  accent-color:#24845c;
+  cursor:pointer;
+}
+
+.received-box label{
+  margin:0;
+  cursor:pointer;
+  font-size:15px;
+}
+
+.received-note{
+  font-size:12px;
+  color:#697386;
+  margin-top:6px;
+}
+
+/* BUTTONS */
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:0;
+  padding:12px 17px;
+  border-radius:9px;
+  color:white;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.primary{
+  background:#b18b48;
+}
+
+.blue{
+  background:#304c68;
+}
+
+.red{
+  background:#b84040;
+}
+
+.gray{
+  background:#687385;
+}
+
+.green{
+  background:#24845c;
+}
+
+.small{
+  padding:7px 11px;
+  font-size:12px;
+}
+
+/* TOP BAR */
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+  flex-wrap:wrap;
+}
+
+.topbar input{
+  flex:1;
+  min-width:180px;
+}
+
+/* SEARCH */
+.search-box{
+  position:relative;
+  margin-bottom:15px;
+}
+
+.search-box input{
+  padding-right:42px;
+  height:48px;
+  font-size:15px;
+  border:1px solid #d5dbe3;
+  box-shadow:0 2px 8px #00000008;
+}
+
+.search-icon{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:20px;
+  color:#7a8493;
+  pointer-events:none;
+}
+
+/* RESULTS */
+.results{
+  display:grid;
+  gap:12px;
+}
+
+.record{
+  background:white;
+  border:1px solid #e6e8ed;
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.record-info{
+  flex:1;
+  min-width:180px;
+}
+
+.record-info strong{
+  display:block;
+  font-size:16px;
+  margin-bottom:7px;
+}
+
+.record-info span{
+  font-size:13px;
+  color:#697386;
+  display:block;
+  margin-top:4px;
+}
+
+.record-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.empty{
+  text-align:center;
+  color:#888;
+  padding:28px;
+}
+
+.badge{
+  display:inline-block;
+  background:#f3ead9;
+  color:#82612c;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.status-badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.status-received{
+  background:#dff3e8;
+  color:#176b46;
+}
+
+.status-not-received{
+  background:#f8e1e1;
+  color:#9a3030;
+}
+
+/* VIEWER ATTACHMENTS */
+.attachment-title{
+  font-weight:bold;
+  color:#17243a;
+  background:#f2f4f7;
+  padding:9px 12px;
+  border-radius:8px;
+  margin:12px 0 8px;
+  font-size:14px;
+}
+
+.attachment-block{
+  margin-bottom:18px;
+}
+
+.attachment-image{
+  max-width:100%;
+  height:auto;
+  display:block;
+  margin:auto;
+  object-fit:contain;
+}
+
+.attachment-pdf{
+  width:100%;
+  height:78vh;
+  border:0;
+}
+
+/* HIDDEN */
+.hidden{
+  display:none!important;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  color:#9299a5;
+  padding:20px;
+  font-size:11px;
+}
+
+/* TOAST */
+#toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#17243a;
+  color:white;
+  padding:13px 20px;
+  border-radius:9px;
+  z-index:3000;
+  display:none;
+  max-width:90%;
+  text-align:center;
+}
+
+/* LOADING */
+#loading{
+  position:fixed;
+  inset:0;
+  background:#17243add;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  z-index:2000;
+  font-size:18px;
+}
+
+/* VIEWER */
+#viewer{
+  position:fixed;
+  inset:0;
+  background:#000d;
+  z-index:1500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:10px;
+}
+
+.viewerbox{
+  background:white;
+  border-radius:12px;
+  padding:12px;
+  max-width:1000px;
+  width:100%;
+  max-height:96vh;
+  overflow:auto;
+}
+
+.viewerbox img{
+  max-width:100%;
+  height:auto;
+  display:block;
+  margin:auto;
+  object-fit:contain;
+}
+
+.viewerbox iframe{
+  width:100%;
+  height:78vh;
+  border:0;
+}
+
+.viewerhead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+  gap:10px;
+}
+
+.viewer-buttons{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.download-btn{
+  width:38px;
+  height:34px;
+  padding:0;
+  font-size:21px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* MOBILE */
+@media(max-width:550px){
+
+  header h1{
+    font-size:21px;
+  }
+
+  header h2{
+    font-size:19px;
+  }
+
+  .home{
+    gap:10px;
+    margin-top:25px;
+  }
+
+  .main-card{
+    min-height:140px;
+    font-size:16px;
+  }
+
+  .main-card span{
+    font-size:30px;
+  }
+
+  .container{
+    padding:10px;
+  }
+
+  .panel{
+    padding:13px;
+  }
+
+  .record{
+    align-items:flex-start;
+  }
+
+  .record-actions{
+    width:100%;
+  }
+
+  .record-actions .btn{
+    flex:1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+  <h1>مكتب السيد النائب</h1>
+  <h2>حسين العنكوشي</h2>
+  <p>نظام إدارة البريد الصادر والوارد</p>
+</header>
+
+
+<div class="container">
+
+  <!-- ================= HOME ================= -->
+
+  <section id="home">
+
+    <div class="home">
+
+      <button
+        class="main-card"
+        onclick="openSection('out')">
+
+        <span>📤</span>
+
+        البريد الصادر
+
+      </button>
+
+
+      <button
+        class="main-card"
+        onclick="openSection('in')">
+
+        <span>📥</span>
+
+        البريد الوارد
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= SECTION ================= -->
+
+  <section
+    id="section"
+    class="hidden">
+
+
+    <!-- زر العودة فقط -->
+    <div class="topbar">
+
+      <button
+        class="btn gray"
+        onclick="goHome()">
+
+        ← الرئيسية
+
+      </button>
+
+    </div>
+
+
+    <!-- ================= FORM ================= -->
+
+    <div
+      class="panel"
+      id="formPanel">
+
+      <h3 id="formTitle">
+        إضافة كتاب
+      </h3>
+
+
+      <form
+        id="recordForm"
+        onsubmit="submitForm(event)">
+
+
+        <!-- التسلسل -->
+
+        <div class="field">
+
+          <label>
+            التسلسل
+          </label>
+
+          <input
+            id="sequence"
+            required
+            inputmode="numeric"
+            placeholder="أدخل رقم التسلسل"
+            oninput="lookupSequence()">
+
+        </div>
+
+
+        <!-- المواطن -->
+
+        <div class="field">
+
+          <label>
+            اسم المواطن
+          </label>
+
+          <input
+            id="citizen"
+            required
+            placeholder="اسم المواطن الثلاثي">
+
+        </div>
+
+
+        <!-- الوزارة -->
+
+        <div class="field">
+
+          <label>
+            الوزارة الصادر لها الكتاب
+          </label>
+
+          <input
+            id="ministry"
+            required
+            placeholder="اسم الوزارة">
+
+        </div>
+
+
+        <!-- صورة الكتاب -->
+
+        <div class="field">
+
+          <label id="bookFileLabel">
+            صورة الكتاب أو تصوير مباشر
+          </label>
+
+          <div class="filebox">
+
+            <span id="bookFileText">
+              📎 اختر صورة الكتاب أو افتح الكاميرا
+            </span>
+
+            <input
+              id="file"
+              type="file"
+              accept="image/*,application/pdf"
+              capture="environment">
+
+            <div
+              id="fileName"
+              style="font-size:12px;margin-top:8px">
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- صورة الهامش - للوارد فقط -->
+
+        <div
+          class="field"
+          id="marginField">
+
+          <label>
+            صورة الهامش
+          </label>
+
+          <div class="filebox">
+
+            <span>
+              📎 اختر صورة الهامش أو افتح الكاميرا
+            </span>
+
+            <input
+              id="marginFile"
+              type="file"
+              accept="image/*,application/pdf"
+              capture="environment">
+
+            <div
+              id="marginFileName"
+              style="font-size:12px;margin-top:8px">
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- حالة الاستلام - للوارد فقط -->
+
+        <div
+          class="field"
+          id="receivedField">
+
+          <label>
+            حالة الاستلام
+          </label>
+
+          <div class="received-box">
+
+            <input
+              id="received"
+              type="checkbox">
+
+            <label for="received">
+              تم استلام الكتاب
+            </label>
+
+          </div>
+
+          <div class="received-note">
+            عند تحديد المربع تظهر حالة الكتاب في السجل: مستلم
+            <br>
+            وإذا لم يتم تحديده تظهر: غير مستلم
+          </div>
+
+        </div>
+
+
+        <!-- الأزرار -->
+
+        <div class="actions">
+
+          <button
+            class="btn primary"
+            type="submit"
+            id="saveBtn">
+
+            حفظ الكتاب
+
+          </button>
+
+
+          <button
+            class="btn gray"
+            type="button"
+            onclick="resetForm()">
+
+            تفريغ الحقول
+
+          </button>
+
+
+          <button
+            class="btn red hidden"
+            type="button"
+            id="cancelEdit"
+            onclick="resetForm()">
+
+            إلغاء التعديل
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+
+    <!-- ================= RECORDS ================= -->
+
+    <div class="panel">
+
+
+      <!-- عنوان السجل -->
+
+      <div
+        class="topbar"
+        style="justify-content:space-between">
+
+        <h3
+          id="listTitle"
+          style="margin:0">
+
+          الكتب المسجلة
+
+        </h3>
+
+
+        <span
+          class="badge"
+          id="count">
+
+          0 كتاب
+
+        </span>
+
+      </div>
+
+
+      <!-- ================= SEARCH ================= -->
+
+      <div class="search-box">
+
+        <span class="search-icon">
+          🔍
+        </span>
+
+        <input
+          id="search"
+          type="text"
+          placeholder="البحث بالتسلسل أو اسم المواطن..."
+          oninput="searchNow()">
+
+      </div>
+
+
+      <!-- النتائج -->
+
+      <div
+        id="results"
+        class="results">
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+  نظام إدارة البريد
+</footer>
+
+
+<!-- TOAST -->
+
+<div id="toast"></div>
+
+
+<!-- LOADING -->
+
+<div id="loading">
+  يرجى الانتظار...
+</div>
+
+
+<!-- ================= VIEWER ================= -->
+
+<div
+  id="viewer"
+  onclick="closeViewer(event)">
+
+  <div
+    class="viewerbox"
+    onclick="event.stopPropagation()">
+
+
+    <div class="viewerhead">
+
+      <strong>
+        عرض مرفقات الكتاب
+      </strong>
+
+
+      <div class="viewer-buttons">
+
+        <!-- زر الطباعة -->
+
+        <button
+          id="printBtn"
+          class="btn blue small download-btn"
+          onclick="printCurrentAttachments()"
+          title="طباعة المرفقات">
+
+          🖨
+
+        </button>
+
+
+        <!-- زر تنزيل -->
+
+        <button
+          id="downloadBtn"
+          class="btn blue small download-btn"
+          onclick="downloadCurrentFile()"
+          title="حفظ الملف">
+
+          ⬇
+
+        </button>
+
+
+        <!-- إغلاق -->
+
+        <button
+          class="btn red small"
+          onclick="closeViewer()">
+
+          ✕
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div id="viewerContent"></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   المتغيرات
+===================================================== */
+
+let currentSection = '';
+
+let outgoing = [];
+
+let incoming = [];
+
+let editId = null;
+
+let searchTimer = null;
+
+let lookupTimer = null;
+
+let lookupValue = '';
+
+let busy = false;
+
+let currentFileBlob = null;
+
+let currentFileName = 'book';
+
+let currentObjectUrl = null;
+
+
+/* =====================================================
+   اختصار العناصر
+===================================================== */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+/* =====================================================
+   شاشة التحميل
+===================================================== */
+
+let loadingTimer = null;
+
+function loading(show){
+
+  $('loading').style.display =
+    show ? 'flex' : 'none';
+
+  clearTimeout(loadingTimer);
+
+  if(show){
+
+    loadingTimer =
+      setTimeout(() => {
+
+        $('loading').style.display =
+          'none';
+
+        if(busy){
+
+          toast(
+            'ما زال رفع الصورة جارياً، يرجى الانتظار قليلاً'
+          );
+
+        }
+
+      },10000);
+
+  }
+
+}
+
+
+/* =====================================================
+   الرسائل
+===================================================== */
+
+function toast(message){
+
+  $('toast').textContent =
+    message;
+
+  $('toast').style.display =
+    'block';
+
+  setTimeout(() => {
+
+    $('toast').style.display =
+      'none';
+
+  },3500);
+
+}
+
+
+/* =====================================================
+   تحميل البيانات
+===================================================== */
+
+function refreshData(callback){
+
+  google.script.run
+
+    .withSuccessHandler(data => {
+
+      outgoing =
+        data.outgoing || [];
+
+      incoming =
+        data.incoming || [];
+
+      if(callback)
+        callback();
+
+    })
+
+    .withFailureHandler(error => {
+
+      toast(
+        error.message ||
+        'تعذر تحميل البيانات'
+      );
+
+    })
+
+    .getInitialData();
+
+}
+
+
+/* =====================================================
+   فتح الصادر أو الوارد
+===================================================== */
+
+function openSection(type){
+
+  currentSection = type;
+
+  $('home')
+    .classList
+    .add('hidden');
+
+  $('section')
+    .classList
+    .remove('hidden');
+
+
+  if(type === 'out'){
+
+    $('formTitle').textContent =
+      'تسجيل كتاب صادر';
+
+    $('listTitle').textContent =
+      'سجل البريد الصادر';
+
+  }
+  else{
+
+    $('formTitle').textContent =
+      'تسجيل كتاب وارد';
+
+    $('listTitle').textContent =
+      'سجل البريد الوارد';
+
+  }
+
+
+  $('citizen').disabled =
+    type === 'in';
+
+  $('ministry').disabled =
+    type === 'in';
+
+  $('bookFileLabel').textContent =
+    type === 'in'
+      ? 'صورة كتاب الأمر الوزاري'
+      : 'صورة الكتاب أو تصوير مباشر';
+
+  $('bookFileText').textContent =
+    type === 'in'
+      ? '📎 اختر صورة كتاب الأمر الوزاري أو افتح الكاميرا'
+      : '📎 اختر صورة الكتاب أو افتح الكاميرا';
+
+  $('file').accept =
+    type === 'in'
+      ? 'image/*'
+      : 'image/*,application/pdf';
+
+
+  /*
+   * إظهار إضافات الوارد فقط
+   */
+  $('marginField').style.display =
+    type === 'in'
+      ? 'block'
+      : 'none';
+
+  $('receivedField').style.display =
+    type === 'in'
+      ? 'block'
+      : 'none';
+
+
+  $('search').value = '';
+
+  resetForm();
+
+  render();
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =====================================================
+   العودة للرئيسية
+===================================================== */
+
+function goHome(){
+
+  currentSection = '';
+
+  $('section')
+    .classList
+    .add('hidden');
+
+  $('home')
+    .classList
+    .remove('hidden');
+
+  $('search').value = '';
+
+  resetForm();
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =====================================================
+   تفريغ النموذج
+===================================================== */
+
+function resetForm(){
+
+  editId = null;
+
+  $('recordForm').reset();
+
+  $('fileName').textContent = '';
+
+  $('marginFileName').textContent = '';
+
+
+  if(currentSection === 'out'){
+
+    $('formTitle').textContent =
+      'تسجيل كتاب صادر';
+
+  }
+  else{
+
+    $('formTitle').textContent =
+      'تسجيل كتاب وارد';
+
+  }
+
+
+  $('saveBtn').textContent =
+    'حفظ الكتاب';
+
+  $('cancelEdit')
+    .classList
+    .add('hidden');
+
+
+  $('citizen').disabled =
+    currentSection === 'in';
+
+  $('ministry').disabled =
+    currentSection === 'in';
+
+
+  $('marginField').style.display =
+    currentSection === 'in'
+      ? 'block'
+      : 'none';
+
+  $('receivedField').style.display =
+    currentSection === 'in'
+      ? 'block'
+      : 'none';
+
+
+  lookupValue = '';
+
+}
+
+
+/* =====================================================
+   اسم ملف الكتاب
+===================================================== */
+
+$('file').addEventListener(
+  'change',
+  function(){
+
+    $('fileName').textContent =
+      this.files[0]
+        ? this.files[0].name
+        : '';
+
+  }
+);
+
+
+/* =====================================================
+   اسم ملف الهامش
+===================================================== */
+
+$('marginFile').addEventListener(
+  'change',
+  function(){
+
+    $('marginFileName').textContent =
+      this.files[0]
+        ? this.files[0].name
+        : '';
+
+  }
+);
+
+
+/* =====================================================
+   البحث عن المواطن عند إدخال تسلسل الوارد
+===================================================== */
+
+function lookupSequence(){
+
+  if(currentSection !== 'in')
+    return;
+
+
+  const seq =
+    $('sequence').value.trim();
+
+
+  clearTimeout(lookupTimer);
+
+
+  if(!seq){
+
+    $('citizen').value = '';
+
+    $('ministry').value = '';
+
+    lookupValue = '';
+
+    return;
+
+  }
+
+
+  lookupTimer =
+    setTimeout(() => {
+
+      if(seq === lookupValue)
+        return;
+
+
+      lookupValue = seq;
+
+
+      google.script.run
+
+        .withSuccessHandler(result => {
+
+          if(
+            $('sequence')
+              .value
+              .trim() !== seq
+          )
+            return;
+
+
+          if(result.found){
+
+            $('citizen').value =
+              result.name;
+
+            $('ministry').value =
+              result.ministry;
+
+          }
+          else{
+
+            $('citizen').value = '';
+
+            $('ministry').value = '';
+
+            toast(result.message);
+
+          }
+
+        })
+
+        .withFailureHandler(error => {
+
+          toast(
+            error.message ||
+            'تعذر جلب بيانات الصادر'
+          );
+
+        })
+
+        .getOutgoingBySequence(seq);
+
+    },350);
+
+}
+
+
+/* =====================================================
+   تجهيز الملف
+===================================================== */
+
+async function prepareFile(file){
+
+  /* ملفات PDF لا يتم تغييرها */
+  if(
+    file.type === 'application/pdf' ||
+    file.size <= 2 * 1024 * 1024
+  ){
+
+    return await new Promise(
+      (resolve,reject) => {
+
+        const reader =
+          new FileReader();
+
+        reader.onload =
+          () => resolve({
+
+            base64:
+              reader.result,
+
+            mimeType:
+              file.type ||
+              'application/octet-stream'
+
+          });
+
+        reader.onerror =
+          () => reject(
+            new Error(
+              'تعذرت قراءة الملف'
+            )
+          );
+
+        reader.readAsDataURL(file);
+
+      }
+    );
+
+  }
+
+
+  /* ضغط الصور الكبيرة فقط */
+  if(file.type.startsWith('image/')){
+
+    return await new Promise(
+      (resolve,reject) => {
+
+        const reader =
+          new FileReader();
+
+        reader.onload = () => {
+
+          const img =
+            new Image();
+
+          img.onload = () => {
+
+            const MAX_SIZE = 1800;
+
+            let width =
+              img.naturalWidth;
+
+            let height =
+              img.naturalHeight;
+
+
+            if(
+              width > MAX_SIZE ||
+              height > MAX_SIZE
+            ){
+
+              if(width > height){
+
+                height =
+                  Math.round(
+                    height *
+                    MAX_SIZE /
+                    width
+                  );
+
+                width =
+                  MAX_SIZE;
+
+              }
+              else{
+
+                width =
+                  Math.round(
+                    width *
+                    MAX_SIZE /
+                    height
+                  );
+
+                height =
+                  MAX_SIZE;
+
+              }
+
+            }
+
+
+            const canvas =
+              document.createElement(
+                'canvas'
+              );
+
+
+            canvas.width =
+              width;
+
+            canvas.height =
+              height;
+
+
+            const ctx =
+              canvas.getContext('2d');
+
+
+            ctx.drawImage(
+              img,
+              0,
+              0,
+              width,
+              height
+            );
+
+
+            canvas.toBlob(
+              blob => {
+
+                if(!blob){
+
+                  reject(
+                    new Error(
+                      'تعذر تجهيز الصورة'
+                    )
+                  );
+
+                  return;
+
+                }
+
+
+                const r =
+                  new FileReader();
+
+
+                r.onload =
+                  () => resolve({
+
+                    base64:
+                      r.result,
+
+                    mimeType:
+                      'image/jpeg'
+
+                  });
+
+
+                r.onerror =
+                  () => reject(
+                    new Error(
+                      'تعذرت قراءة الصورة'
+                    )
+                  );
+
+
+                r.readAsDataURL(
+                  blob
+                );
+
+              },
+              'image/jpeg',
+              0.82
+            );
+
+          };
+
+
+          img.onerror =
+            () => reject(
+              new Error(
+                'تعذرت قراءة الصورة'
+              )
+            );
+
+
+          img.src =
+            reader.result;
+
+        };
+
+
+        reader.onerror =
+          () => reject(
+            new Error(
+              'تعذرت قراءة الملف'
+            )
+          );
+
+
+        reader.readAsDataURL(file);
+
+      }
+    );
+
+  }
+
+
+  /* أي ملف آخر */
+  return await new Promise(
+    (resolve,reject) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        () => resolve({
+
+          base64:
+            reader.result,
+
+          mimeType:
+            file.type ||
+            'application/octet-stream'
+
+        });
+
+
+      reader.onerror =
+        () => reject(
+          new Error(
+            'تعذرت قراءة الملف'
+          )
+        );
+
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   حفظ الكتاب
+===================================================== */
+
+async function submitForm(event){
+
+  event.preventDefault();
+
+
+  if(busy)
+    return;
+
+
+  const file =
+    $('file').files[0];
+
+
+  /*
+   * الصادر يتطلب الكتاب، والوارد يسمح بالحفظ دون مرفقات أو مع أي مرفق
+   */
+  const marginFile =
+    $('marginFile').files[0];
+
+  if(
+    currentSection === 'in' &&
+    file &&
+    !file.type.startsWith('image/')
+  ){
+    toast('يرجى إرفاق صورة كتاب الأمر الوزاري');
+    return;
+  }
+
+  if(
+    !editId &&
+    currentSection === 'out' &&
+    !file
+  ){
+    toast('يرجى إرفاق صورة الكتاب');
+    return;
+  }
+
+
+  if(
+    file &&
+    file.size >
+    12 * 1024 * 1024
+  ){
+
+    toast(
+      'حجم ملف الكتاب أكبر من 12 ميغابايت'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    marginFile &&
+    marginFile.size >
+    12 * 1024 * 1024
+  ){
+
+    toast(
+      'حجم ملف الهامش أكبر من 12 ميغابايت'
+    );
+
+    return;
+
+  }
+
+
+  busy = true;
+
+  loading(true);
+
+
+  try{
+
+    const form = {
+
+      sequence:
+        $('sequence')
+          .value
+          .trim(),
+
+      name:
+        $('citizen')
+          .value
+          .trim(),
+
+      ministry:
+        $('ministry')
+          .value
+          .trim(),
+
+      id:
+        editId,
+
+      type:
+        currentSection,
+
+      /*
+       * صورة الكتاب
+       */
+      file:
+        file
+          ? await prepareFile(file)
+          : null,
+
+      /*
+       * صورة الهامش
+       */
+      marginFile:
+        (
+          currentSection === 'in' &&
+          marginFile
+        )
+          ? await prepareFile(
+              marginFile
+            )
+          : null,
+
+      /*
+       * حالة الاستلام
+       */
+      received:
+        currentSection === 'in'
+          ? $('received').checked
+          : false
+
+    };
+
+
+    const method =
+      editId
+
+        ? 'updateRecord'
+
+        : currentSection === 'out'
+
+          ? 'saveOutgoing'
+
+          : 'saveIncoming';
+
+
+    google.script.run
+
+      .withSuccessHandler(result => {
+
+        loading(false);
+
+        busy = false;
+
+        toast(result.message);
+
+        resetForm();
+
+        refreshData(render);
+
+      })
+
+      .withFailureHandler(error => {
+
+        loading(false);
+
+        busy = false;
+
+        toast(
+          error.message ||
+          'تعذر حفظ الكتاب'
+        );
+
+      })[method](form);
+
+
+  }
+  catch(error){
+
+    loading(false);
+
+    busy = false;
+
+    toast(
+      error.message ||
+      'حدث خطأ أثناء قراءة الملف'
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   البحث داخل السجل
+===================================================== */
+
+function searchNow(){
+
+  clearTimeout(searchTimer);
+
+
+  searchTimer =
+    setTimeout(() => {
+
+      const q =
+        $('search')
+          .value
+          .trim();
+
+
+      if(!q){
+
+        render();
+
+        return;
+
+      }
+
+
+      google.script.run
+
+        .withSuccessHandler(data => {
+
+          const records =
+            currentSection === 'out'
+
+              ? data.outgoing
+
+              : data.incoming;
+
+
+          renderRecords(records);
+
+        })
+
+        .withFailureHandler(error => {
+
+          toast(
+            error.message ||
+            'تعذر البحث'
+          );
+
+        })
+
+        .searchRecords(q);
+
+
+    },250);
+
+}
+
+
+/* =====================================================
+   عرض القائمة
+===================================================== */
+
+function render(){
+
+  const records =
+    currentSection === 'out'
+
+      ? outgoing
+
+      : incoming;
+
+
+  renderRecords(records);
+
+}
+
+
+/* =====================================================
+   رسم السجلات
+===================================================== */
+
+function renderRecords(records){
+
+  $('count').textContent =
+    records.length +
+    ' كتاب';
+
+
+  if(!records.length){
+
+    $('results').innerHTML =
+      '<div class="empty">لا توجد كتب مسجلة حالياً</div>';
+
+    return;
+
+  }
+
+
+  $('results').innerHTML =
+    records.map(r => `
+
+      <div class="record">
+
+        <div class="record-info">
+
+          <span class="badge">
+
+            التسلسل:
+            ${escapeHTML(r.sequence)}
+
+          </span>
+
+
+          <strong>
+
+            ${escapeHTML(r.name)}
+
+          </strong>
+
+
+          <span>
+
+            🏢
+            ${escapeHTML(r.ministry)}
+
+          </span>
+
+
+          ${
+            currentSection === 'in'
+              ? `
+                <span
+                  class="status-badge ${
+                    r.status === 'مستلم'
+                      ? 'status-received'
+                      : 'status-not-received'
+                  }">
+
+                  ${
+                    r.status === 'مستلم'
+                      ? '✓ مستلم'
+                      : '✕ غير مستلم'
+                  }
+
+                </span>
+              `
+              : ''
+          }
+
+        </div>
+
+
+        <div class="record-actions">
+
+          <button
+            class="btn blue small"
+            onclick="viewFile('${r.id}')">
+
+            عرض
+
+          </button>
+
+
+          <button
+            class="btn primary small"
+            onclick="editRecord('${r.id}')">
+
+            تعديل
+
+          </button>
+
+
+          <button
+            class="btn red small"
+            onclick="removeRecord('${r.id}')">
+
+            حذف
+
+          </button>
+
+
+        </div>
+
+      </div>
+
+    `).join('');
+
+}
+
+
+/* =====================================================
+   حماية النص
+===================================================== */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ''
+  ).replace(
+    /[&<>"']/g,
+    c => ({
+
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+
+    })[c]
+  );
+
+}
+
+
+/* =====================================================
+   تعديل
+===================================================== */
+
+function editRecord(id){
+
+  const records =
+    currentSection === 'out'
+
+      ? outgoing
+
+      : incoming;
+
+
+  const r =
+    records.find(
+      x => x.id === id
+    );
+
+
+  if(!r)
+    return;
+
+
+  editId = id;
+
+
+  $('sequence').value =
+    r.sequence;
+
+  $('citizen').value =
+    r.name;
+
+  $('ministry').value =
+    r.ministry;
+
+
+  $('file').value = '';
+
+  $('marginFile').value = '';
+
+
+  $('fileName').textContent =
+    'يمكن اختيار ملف جديد لاستبدال المرفق الحالي';
+
+
+  if(currentSection === 'in'){
+
+    $('marginFileName').textContent =
+      r.marginFileId
+        ? 'يمكن اختيار ملف جديد لاستبدال صورة الهامش الحالية'
+        : 'لا توجد صورة هامش حالياً';
+
+    $('received').checked =
+      r.status === 'مستلم';
+
+  }
+
+
+  $('formTitle').textContent =
+    'تعديل بيانات الكتاب';
+
+
+  $('saveBtn').textContent =
+    'حفظ التعديلات';
+
+
+  $('cancelEdit')
+    .classList
+    .remove('hidden');
+
+
+  $('citizen').disabled =
+    currentSection === 'in';
+
+  $('ministry').disabled =
+    currentSection === 'in';
+
+  $('bookFileLabel').textContent =
+    currentSection === 'in'
+      ? 'صورة كتاب الأمر الوزاري'
+      : 'صورة الكتاب أو تصوير مباشر';
+
+  $('bookFileText').textContent =
+    currentSection === 'in'
+      ? '📎 اختر صورة كتاب الأمر الوزاري أو افتح الكاميرا'
+      : '📎 اختر صورة الكتاب أو افتح الكاميرا';
+
+  $('file').accept =
+    currentSection === 'in'
+      ? 'image/*'
+      : 'image/*,application/pdf';
+
+
+  $('marginField').style.display =
+    currentSection === 'in'
+      ? 'block'
+      : 'none';
+
+
+  $('receivedField').style.display =
+    currentSection === 'in'
+      ? 'block'
+      : 'none';
+
+
+  $('formPanel')
+    .scrollIntoView({
+      behavior:'smooth'
+    });
+
+}
+
+
+/* =====================================================
+   حذف
+===================================================== */
+
+function removeRecord(id){
+
+  if(
+    !confirm(
+      'هل أنت متأكد من حذف هذا الكتاب ومرفقاته؟'
+    )
+  )
+    return;
+
+
+  loading(true);
+
+
+  google.script.run
+
+    .withSuccessHandler(result => {
+
+      loading(false);
+
+      toast(result.message);
+
+      refreshData(render);
+
+    })
+
+    .withFailureHandler(error => {
+
+      loading(false);
+
+      toast(
+        error.message ||
+        'تعذر الحذف'
+      );
+
+    })
+
+    .deleteRecord(
+      currentSection,
+      id
+    );
+
+}
+
+
+/* =====================================================
+   تحويل Base64 إلى Blob
+===================================================== */
+
+function base64ToBlob(data){
+
+  const binary =
+    atob(data.base64);
+
+
+  const bytes =
+    new Uint8Array(
+      binary.length
+    );
+
+
+  for(
+    let i = 0;
+    i < binary.length;
+    i++
+  ){
+
+    bytes[i] =
+      binary.charCodeAt(i);
+
+  }
+
+
+  return new Blob(
+    [bytes],
+    {
+      type:
+        data.mimeType
+    }
+  );
+
+}
+
+
+/* =====================================================
+   إنشاء مرفق للعرض
+===================================================== */
+
+function createAttachment(
+  data,
+  title
+){
+
+  const block =
+    document.createElement(
+      'div'
+    );
+
+  block.className =
+    'attachment-block';
+
+
+  const titleEl =
+    document.createElement(
+      'div'
+    );
+
+  titleEl.className =
+    'attachment-title';
+
+  titleEl.textContent =
+    title;
+
+
+  block.appendChild(
+    titleEl
+  );
+
+
+  const blob =
+    base64ToBlob(data);
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  if(
+    data.mimeType ===
+    'application/pdf'
+  ){
+
+    const iframe =
+      document.createElement(
+        'iframe'
+      );
+
+    iframe.className =
+      'attachment-pdf';
+
+    iframe.src =
+      url;
+
+
+    block.appendChild(
+      iframe
+    );
+
+  }
+  else{
+
+    const img =
+      document.createElement(
+        'img'
+      );
+
+    img.className =
+      'attachment-image';
+
+    img.alt =
+      title;
+
+    img.decoding =
+      'async';
+
+    img.loading =
+      'eager';
+
+    img.src =
+      url;
+
+
+    block.appendChild(
+      img
+    );
+
+  }
+
+
+  /*
+   * الاحتفاظ بالرابط حتى يبقى
+   * صالحاً أثناء عرض النافذة
+   */
+  block.dataset.objectUrl =
+    url;
+
+
+  return {
+    block,
+    blob,
+    url,
+    name:
+      data.name || 'file'
+  };
+
+}
+
+
+/* =====================================================
+   عرض المرفقات
+===================================================== */
+
+function viewFile(id){
+
+  const records =
+    currentSection === 'out'
+      ? outgoing
+      : incoming;
+
+  const record =
+    records.find(x => x.id === id);
+
+  const hasBook = !!(record && record.fileId);
+  const hasMargin =
+    !!(record && currentSection === 'in' && record.marginFileId);
+
+  if(!record || (!hasBook && !hasMargin)){
+    toast('لا يوجد مرفق');
+    return;
+  }
+
+  loading(true);
+
+  let viewerFinished = false;
+
+  const viewerTimer = setTimeout(() => {
+    if(viewerFinished) return;
+    viewerFinished = true;
+    loading(false);
+    toast('تعذر عرض المرفقات خلال 10 ثوانٍ، يرجى المحاولة مرة أخرى');
+  },10000);
+
+  const finishViewer = (marginData, bookData) => {
+    if(viewerFinished) return;
+    viewerFinished = true;
+    clearTimeout(viewerTimer);
+    showAttachments(marginData, bookData);
+    loading(false);
+  };
+
+  const failViewer = error => {
+    if(viewerFinished) return;
+    viewerFinished = true;
+    clearTimeout(viewerTimer);
+    loading(false);
+    toast(error.message || 'تعذر جلب المرفقات');
+  };
+
+  // إذا كان الكتاب موجوداً نجلبه، وإلا نعرض الهامش وحده.
+  if(hasBook){
+    google.script.run
+      .withSuccessHandler(bookData => {
+        if(hasMargin){
+          google.script.run
+            .withSuccessHandler(marginData => finishViewer(marginData, bookData))
+            .withFailureHandler(() => finishViewer(null, bookData))
+            .getImageData(record.marginFileId);
+        }else{
+          finishViewer(null, bookData);
+        }
+      })
+      .withFailureHandler(failViewer)
+      .getImageData(record.fileId);
+  }else{
+    google.script.run
+      .withSuccessHandler(marginData => finishViewer(marginData, null))
+      .withFailureHandler(failViewer)
+      .getImageData(record.marginFileId);
+  }
+}
+
+
+/* =====================================================
+   إظهار صورة الهامش ثم صورة الكتاب
+===================================================== */
+
+function showAttachments(
+  marginData,
+  bookData
+){
+
+  $('viewerContent').innerHTML = '';
+
+  if(currentObjectUrl){
+    URL.revokeObjectURL(currentObjectUrl);
+    currentObjectUrl = null;
+  }
+
+  if(marginData){
+    const margin = createAttachment(marginData, 'صورة الهامش');
+    $('viewerContent').appendChild(margin.block);
+  }
+
+  if(bookData){
+    const book = createAttachment(bookData, 'صورة الكتاب');
+    $('viewerContent').appendChild(book.block);
+
+    currentFileBlob = book.blob;
+    currentFileName = book.name;
+    currentObjectUrl = book.url;
+  }else if(marginData){
+    // عند وجود هامش فقط يكون هو الملف الأساسي للتنزيل
+    const marginBlob = base64ToBlob(marginData);
+    currentFileBlob = marginBlob;
+    currentFileName = marginData.name || 'margin';
+  }else{
+    currentFileBlob = null;
+    currentFileName = 'book';
+  }
+
+  $('viewer').style.display = 'flex';
+}
+
+
+/* =====================================================
+   تنزيل الصورة الحالية
+===================================================== */
+
+async function downloadCurrentFile(){
+
+  if(!currentFileBlob){
+
+    toast(
+      'لا يوجد ملف للحفظ'
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const file =
+      new File(
+        [currentFileBlob],
+        currentFileName,
+        {
+          type:
+            currentFileBlob.type
+        }
+      );
+
+
+    /*
+     * في الهاتف، خصوصاً iPhone،
+     * نستخدم المشاركة حتى يستطيع
+     * المستخدم اختيار حفظ الصورة
+     * في الاستديو.
+     */
+
+    if(
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({
+        files:[file]
+      })
+    ){
+
+      await navigator.share({
+
+        files:[file],
+
+        title:
+          'حفظ صورة الكتاب'
+
+      });
+
+      return;
+
+    }
+
+
+    /* المتصفحات الأخرى */
+
+    const url =
+      URL.createObjectURL(
+        currentFileBlob
+      );
+
+
+    const a =
+      document.createElement(
+        'a'
+      );
+
+
+    a.href =
+      url;
+
+
+    a.download =
+      currentFileName;
+
+
+    document.body.appendChild(
+      a
+    );
+
+
+    a.click();
+
+
+    a.remove();
+
+
+    setTimeout(() => {
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    },30000);
+
+
+  }
+  catch(error){
+
+    if(
+      error.name !==
+      'AbortError'
+    ){
+
+      toast(
+        'تعذر حفظ الملف'
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   طباعة المرفقات المعروضة
+===================================================== */
+
+function printCurrentAttachments(){
+
+  const content = $('viewerContent');
+  const images = Array.from(content.querySelectorAll('img'));
+  const frames = Array.from(content.querySelectorAll('iframe'));
+
+  if(!images.length && !frames.length){
+    toast('لا توجد مرفقات للطباعة');
+    return;
+  }
+
+  // إزالة منطقة طباعة قديمة إن وجدت
+  const oldPrintArea = document.getElementById('printArea');
+  if(oldPrintArea) oldPrintArea.remove();
+
+  const printArea = document.createElement('div');
+  printArea.id = 'printArea';
+
+  const printStyle = document.createElement('style');
+  printStyle.id = 'printAreaStyle';
+  printStyle.textContent = `
+    #printArea{display:none;}
+    @media print{
+      body *{visibility:hidden !important;}
+      #printArea,#printArea *{visibility:visible !important;}
+      #printArea{
+        display:block !important;
+        position:absolute !important;
+        top:0 !important;
+        right:0 !important;
+        left:0 !important;
+        width:100% !important;
+        background:#fff !important;
+        margin:0 !important;
+        padding:8mm !important;
+        box-sizing:border-box !important;
+      }
+      #printArea img{
+        display:block !important;
+        width:100% !important;
+        max-width:100% !important;
+        height:auto !important;
+        max-height: none !important;
+        object-fit:contain !important;
+        margin:0 auto 8mm !important;
+        page-break-after:always !important;
+        break-after:page !important;
+      }
+      #printArea iframe{
+        display:block !important;
+        width:100% !important;
+        height:95vh !important;
+        border:0 !important;
+        page-break-after:always !important;
+      }
+      /* إلغاء هوامش الطباعة التي قد يضع المتصفح فيها رابط المشروع */
+      @page{margin:0 !important;}
+    }
+  `;
+
+  images.forEach(img => {
+    const copy = document.createElement('img');
+    copy.src = img.src;
+    copy.alt = img.alt || 'مرفق';
+    printArea.appendChild(copy);
+  });
+
+  frames.forEach(frame => {
+    const copy = document.createElement('iframe');
+    copy.src = frame.src;
+    printArea.appendChild(copy);
+  });
+
+  document.head.appendChild(printStyle);
+  document.body.appendChild(printArea);
+
+  let cleaned = false;
+  const cleanup = () => {
+    if(cleaned) return;
+    cleaned = true;
+    printArea.remove();
+    printStyle.remove();
+    window.removeEventListener('afterprint', cleanup);
+  };
+
+  window.addEventListener('afterprint', cleanup);
+
+  // انتظر تحميل الصور قبل استدعاء الطباعة
+  const printImages = Array.from(printArea.querySelectorAll('img'));
+  const imageLoads = printImages.map(img => {
+    if(img.complete && img.naturalWidth > 0) return Promise.resolve();
+    return new Promise(resolve => {
+      img.onload = resolve;
+      img.onerror = resolve;
+      setTimeout(resolve, 5000);
+    });
+  });
+
+  Promise.all(imageLoads).then(() => {
+    setTimeout(() => {
+      window.focus();
+      window.print();
+      // احتياط للمتصفحات التي لا تطلق afterprint
+      setTimeout(cleanup, 30000);
+    }, 300);
+  });
+}
+
+
+/* =====================================================
+   إغلاق نافذة العرض
+===================================================== */
+
+function closeViewer(event){
+
+  if(
+    event &&
+    event.target !==
+    $('viewer')
+  )
+    return;
+
+
+  $('viewer')
+    .style.display =
+    'none';
+
+
+  /*
+   * تنظيف روابط الصور
+   */
+  const blocks =
+    $('viewerContent')
+      .querySelectorAll(
+        '[data-object-url]'
+      );
+
+
+  blocks.forEach(
+    block => {
+
+      if(
+        block.dataset.objectUrl
+      ){
+
+        URL.revokeObjectURL(
+          block.dataset.objectUrl
+        );
+
+      }
+
+    }
+  );
+
+
+  $('viewerContent')
+    .innerHTML = '';
+
+
+  currentFileBlob =
+    null;
+
+
+  currentFileName =
+    'book';
+
+
+  currentObjectUrl =
+    null;
+
+}
+
+
+/* =====================================================
+   تحميل البيانات عند فتح البرنامج
+===================================================== */
+
+loading(true);
+
+
+google.script.run
+
+  .withSuccessHandler(data => {
+
+    outgoing =
+      data.outgoing || [];
+
+    incoming =
+      data.incoming || [];
+
+    loading(false);
+
+  })
+
+  .withFailureHandler(error => {
+
+    loading(false);
+
+    toast(
+      error.message ||
+      'تعذر تحميل البيانات'
+    );
+
+  })
+
+  .getInitialData();
+
+</script>
+
+</body>
+</html>
